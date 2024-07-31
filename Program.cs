@@ -16,10 +16,11 @@ public class Program
         Solution sln = new Solution();
 
         // Input
-        string s = "baababbaabbaaabaabbabbbabaaaaaabaabababaaababbb";
+        int[][] books = [[1, 1], [2, 3], [1, 3], [1, 1]];
+        int shelfwidth = 4;
 
-        int ans = sln.MinimumDeletions(s);
-        Console.WriteLine();
+        int ans = sln.MinHeightShelves(books, shelfwidth);
+        //Console.WriteLine();
         Console.Write(ans);
     }
 }
@@ -27,25 +28,45 @@ public class Program
 
 public class Solution
 {
-    public int MinimumDeletions(string s)
+    public int MinHeightShelves(int[][] books, int shelfWidth)
     {
-        int deletion = 0;
-        int BCount = 0;
+        int n = books.Length;
+        int[] minHeight = new int[n + 1];           // minimum height to accodomate first i books
 
-        foreach (char c in s)
+        // If no books then we have a height of 0
+        minHeight[0] = 0;
+
+        // Iterate through books
+        for (int i = 1; i <= n; i++)
         {
-            if (c == 'b')
+            minHeight[i] = int.MaxValue;
+
+            // Test new book by first putting on its own shelf level
+            int currShelfWidth = 0;
+            int currShelfHeight = 0;
+
+            // Iterate from i-1 book to first book and calculate minHeight as you add books to new shelf level
+            for (int j = i - 1; j >= 0; j--)
             {
-                BCount++;
-            }
-            else if (BCount > 0)
-            {
-                deletion++;
-                BCount--;
+                int currBookThickness = books[j][0];
+                int currBookHeight = books[j][1];
+
+                currShelfWidth += currBookThickness;
+
+                if (currShelfWidth > shelfWidth)
+                {
+                    break;
+                }
+
+                currShelfHeight = Math.Max(currShelfHeight, currBookHeight);
+
+                // Calculate height of adding book j to current shelf level
+                int possibleHeight = minHeight[j] + currShelfHeight;
+
+                // Get lesser of previously calculated height or current possible height
+                minHeight[i] = Math.Min(minHeight[i], possibleHeight);
             }
         }
-
-
-        return deletion;
+        return minHeight[n];
     }
 }
