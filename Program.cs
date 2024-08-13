@@ -16,77 +16,52 @@ public class Program
         Solution sln = new Solution();
 
         // Input
-        int rows = 1;
-        int cols = 4;
-        int rStart = 0;
-        int cStart = 0;
+        int[] candidates = [10, 1, 2, 7, 6, 1, 5];
+        int target = 8;
 
-        int[][] ans = sln.SpiralMatrixIII(rows, cols, rStart, cStart);
+        IList<IList<int>> ans = sln.CombinationSum2(candidates, target);
         //Console.WriteLine();
         //Console.Write(ans);
 
-        for (int i = 0; i < ans.Length; i++)
+        foreach (var i in ans)
         {
             Console.Write("[");
-            for (int j = 0; j < 2; j++)
+            foreach (int j in i)
             {
-                Console.Write(ans[i][j]);
-                if (j == 0)
-                {
-                    Console.Write(",");
-                }
+                Console.Write(j);
             }
-            Console.Write("]");
-            Console.WriteLine();
+            Console.WriteLine("]");
         }
     }
 }
 
-
 public class Solution
 {
-    /* Going right or left increases the number of cells you visit in that row by 1 while going up or down uses the same number of cells as previous left/right
-     * 
-     * 7    8   9
-     * 6    1   2
-     * 5    4   3
-     * 
-     * In the above 1->2 is one space, 2->3 is one space, then you go 3->5 which is 2 space, 5->7 is 2 space, 7->9 plus 1 off grid is 3 space
-     */
-    public int[][] SpiralMatrixIII(int rows, int cols, int rStart, int cStart)
+    // For each subsequent number, we test either adding it or passing over it
+    public IList<IList<int>> CombinationSum2(int[] candidates, int target)
     {
-        /*
-         * direction = 0 -> East
-         * direction = 1 -> South
-         * direction = 2 -> West
-         * direction = 3 -> North
-         */
-        int[][] dir = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-        int[][] traversed = new int[rows * cols][];
-        int index = 0;
+        IList<IList<int>> list = new List<IList<int>>();
+        Array.Sort(candidates);
+        Backtrack(list, new List<int>(), candidates, target, 0);
+        return list;
+    }
 
-        for (int step = 1, direction = 0; index < rows * cols;)
+    private void Backtrack(IList<IList<int>> answer, IList<int> tempList, int[] candidates, int totalLeft, int index)
+    {
+        if (totalLeft == 0)
         {
-            // Step increases every 2 turns 
-            for (int i = 0; i < 2; ++i)
-            {
-                for (int j = 0; j < step; ++j)
-                {
-                    // If we are in a valid position on the matrix, then add it to traversed array
-                    if (rStart >= 0 && rStart < rows && cStart >= 0 && cStart < cols)
-                    {
-                        traversed[index] = [rStart, cStart];
-                        ++index;
-                    }
-                    // Traverse through matrix
-                    rStart += dir[direction][0];
-                    cStart += dir[direction][1];
-                }
-                // Calculate next iteration's direction
-                direction = (direction + 1) % 4;
-            }
-            ++step;
+            answer.Add(new List<int>(tempList));
+            return;
         }
-        return traversed;
+
+        for (int i = index; i < candidates.Length; ++i)
+        {
+            if (i > index && candidates[i] == candidates[i - 1]) { continue; }      // Prevent reusing numbers
+            if (candidates[i] > totalLeft) { break; }
+
+            tempList.Add(candidates[i]);
+            Backtrack(answer, tempList, candidates, totalLeft - candidates[i], i + 1);      // Check for all possible combinations
+            tempList.RemoveAt(tempList.Count - 1);      // Backtrack tempList
+        }
     }
 }
