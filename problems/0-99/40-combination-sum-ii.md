@@ -33,15 +33,17 @@ Constraints:
 ## Explanation
 Backtracking can be used to efficiently generate all possible combinations recursively. Backtracking incrementally builds candidates to the solutions and abandons a candidate (backtracks) if a candidate can't lead to a final solution. For this problem, we can discard the candidate solution when it exceeds the target value.
 
-When we evaluate a number we have 2 options:
+When we evaluate a candidate we have 2 options:
 1. We add the current array element to the combination array and move this combination to the next index recursively.  
 2. We remove the element from the current combination array and move this combination to the next index.
 
 Therefore, for every index, we explore 2 possibilities of including and excluding that value and calculated the combination sum of the maintained combination array.  
 If the desired sum is reached, we can append the list to the answer list.
 
-Since we need to return unique combinations, we can optimize by grouping equal values together. Then when we remove an element and the next element is the same, we can simply skip over it.  
-Otherwise, we would repeat those calculations and we would need to get only the unique answers at the end.
+Since we need to return unique combinations, we can optimize by grouping equal values together. This optimizes it in 2 ways:
+1. When we remove an element and the next element is the same, we can simply skip over it.  
+ a. Otherwise, we would repeat those calculations and we would need to get only the unique answers at the end.
+2. When we exceed the target number, we know all future candidates are invalid.
 
 If frequency of element is *freq*, you need to make backtracking calls for all its possible frequencies between 0 and *freq*, then we can simply pickup them from the beginning of its group in the sorted array.
 
