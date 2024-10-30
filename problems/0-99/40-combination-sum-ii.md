@@ -33,13 +33,16 @@ Constraints:
 ## Explanation
 Backtracking can be used to efficiently generate all possible combinations recursively. Backtracking incrementally builds candidates to the solutions and abandons a candidate (backtracks) if a candidate can't lead to a final solution. For this problem, we can discard the candidate solution when it exceeds the target value.
 
-For the first option, we add the current array element to the combination array and move this combination to the next index recursively.  
-For the second option, we remove the element from the current combination array and move this combination to the next index.
+When we evaluate a number we have 2 options:
+1. We add the current array element to the combination array and move this combination to the next index recursively.  
+2. We remove the element from the current combination array and move this combination to the next index.
 
 Therefore, for every index, we explore 2 possibilities of including and excluding that value and calculated the combination sum of the maintained combination array.  
 If the desired sum is reached, we can append the list to the answer list.
 
-Since we need to return unique combinations, we can optimize by grouping equal values together.  
+Since we need to return unique combinations, we can optimize by grouping equal values together. Then when we remove an element and the next element is the same, we can simply skip over it.  
+Otherwise, we would repeat those calculations and we would need to get only the unique answers at the end.
+
 If frequency of element is *freq*, you need to make backtracking calls for all its possible frequencies between 0 and *freq*, then we can simply pickup them from the beginning of its group in the sorted array.
 
 ## Code
@@ -55,6 +58,13 @@ public class Solution
         return list;
     }
 
+    /*
+     * @param answer The unique combination of candidates that equals target
+     * @param tempList A temporary list used to store potential answers
+     * @param candidates The array of candidate values
+     * @param totalLeft target - sum of values in tempList
+     * @param index The index of candidate values we checked
+     */
     private void Backtrack(IList<IList<int>> answer, IList<int> tempList, int[] candidates, int totalLeft, int index)
     {
         if (totalLeft == 0)
@@ -65,7 +75,7 @@ public class Solution
 
         for (int i = index; i < candidates.Length; ++i)
         {
-            if (i > index && candidates[i] == candidates[i - 1]) { continue; }      // Prevent reusing numbers
+            if (i > index && candidates[i] == candidates[i - 1]) { continue; }      // Continue pass the same number if we backtracked it already
             if (candidates[i] > totalLeft) { break; }
 
             tempList.Add(candidates[i]);
