@@ -45,8 +45,6 @@ Since we need to return unique combinations, we can optimize by grouping equal v
  a. Otherwise, we would repeat those calculations and we would need to get only the unique answers at the end.
 2. When we exceed the target number, we know all future candidates are invalid.
 
-If frequency of element is *freq*, you need to make backtracking calls for all its possible frequencies between 0 and *freq*, then we can simply pickup them from the beginning of its group in the sorted array.
-
 ## Code
 ```
 public class Solution
@@ -77,7 +75,7 @@ public class Solution
 
         for (int i = index; i < candidates.Length; ++i)
         {
-            if (i > index && candidates[i] == candidates[i - 1]) { continue; }      // Continue pass the same number if we backtracked it already
+            if (i > index && candidates[i] == candidates[i - 1]) { continue; }      // Continue pass a number if we are backtracking that same number already
             if (candidates[i] > totalLeft) { break; }
 
             tempList.Add(candidates[i]);
