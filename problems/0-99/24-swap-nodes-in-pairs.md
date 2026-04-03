@@ -2,7 +2,7 @@
 Given a linked list, swap every two adjacent nodes and return its head. You must solve the problem without modifying the values in the list's nodes (i.e., only nodes themselves may be changed.)
 
 ## Explanation
-Due to constraints of not changing the values, we must instead swap the next values. The solution:
+The solution:
 1. Uses the previous node to the current node
 2. Points previous node to the next node from the current node
 3. Updates the current node to point to the next next node
@@ -14,22 +14,28 @@ We generate a previousNode with default value 0 and points to head so the soluti
 [1, 2, 3, 4]
 
 1. Initial setup  
-previousNode = 0, 1, 2, 3, 4  
-currentNode = 1, 2, 3, 4
+previousNode = 0 -> 1 -> 2 -> 3 -> 4  
+currentNode = 1 -> 2 -> 3 -> 4  
 
-2. Point previousNode to currentNode.next  
-previousNode = 0, 2, 3, 4  
-currentNode = 1, 2, 3, 4
+2. Point previousNode to currentNode.next (moves original 2nd node to after previousNode)  
+previousNode = 0 -> 2 -> 3 -> 4  
+currentNode = 1 -> 2 -> 3 -> 4
 
-3. Point currentNode.next to next next node  
-previousNode = 0, 2, 3, 4  
-currentNode = 1, 3, 4
+3. Point currentNode to previousNode.next.next (points original 1st node to nodes after original 2nd node)  
+previousNode = 0 -> 2 -> 3 -> 4  
+currentNode = 1 -> 3 -> 4
 
-4. Point previousNode.next.next to currentNode  
-previousNode = 0, 2, 1, 3, 4  
-currentNode = 1, 3, 4
+4. Point previousNode.next to currentNode (re-add original 1st node to after original 2nd node)  
+previousNode = 0 -> 2 -> 1 -> 3 -> 4  
+currentNode = 1 -> 3 -> 4
 
-5. Then we update previousNode to point to 1 and currentNode to point to 3 to continue with the next pair
+5. Point previousNode to to currentNode  
+previousNode = 1 -> 3 -> 4  
+currentNode = 1 -> 3 -> 4
+
+6. Point currentNode to currentNode.next  
+previousNode = 1 -> 3 -> 4  
+currentNode = 3 -> 4
 
 ## Solution
 ```
