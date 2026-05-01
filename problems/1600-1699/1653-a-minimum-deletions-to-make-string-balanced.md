@@ -27,6 +27,7 @@ Constraints:
 * s[i] is 'a' or 'b'​​.
 
 ## Explanation
+A string is balanced if there is no 'a' after a 'b' and there is more 'a' than 'b'.  
 We iterate through the string and track each occurence of a 'b'. If we encounter an 'a' while the b count is not zero, then we either need to delete a previous 'b' or the 'a'.  
 For example, "bba" would require deleting the 'a' instead of the 2 'b'.  
 Therefore, for each 'a', we delete at most 1 character and decrease the b count by 1. That way, if there is a final string of a's after a string of b, it only deletes the minimum amount (if we reach the end with b count non-zero, then we delete the a's, otherwise we delete the b's).
